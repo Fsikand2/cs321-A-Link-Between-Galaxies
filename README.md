@@ -9,7 +9,7 @@ Completing a planet rewards the player with a ship upgrade that unlocks access t
 ## Team Members
 
 - [Logan Mann] — @[LogMann27]
-- [Emmie Tran] — @[pinkellie27]
+- [Emmie Tran] — @[pinkellie1]
 - [Sully Deghdegh] — @[SullivanSWE]
 - [Samay Naveen] — @[samaynaveen0414]
 - [Farhan Sikandar] — @[Fsikand2]
