@@ -36,9 +36,7 @@ These features describe our current plan. The final scope may change based on te
 
 ## Development Platform
 
-We have not selected a game engine yet. Options under consideration include Godot, Unreal Engine, and Roblox Studio.
-
-We will update this section with the selected engine, programming language, and setup instructions once those decisions are made.
+Godot 4.6 with GDScript, 2D TileMapLayer levels, and the existing Forward Plus renderer.
 
 ## Current Progress
 
@@ -81,7 +79,22 @@ These tasks and user stories are proposals to refine with our TA during the pre-
 
 ## Running the Project
 
-Setup and run instructions will be added after we select the engine and create the initial prototype.
+1. Open `project.godot` in Godot 4.6 and allow asset import to finish.
+2. Press F6 only to test an individual scene; press **F5** for the complete menu flow.
+3. Select **New Game**. Move with the arrow keys; press **E** to interact.
+4. Walk north from spawn toward the cyan diamond and press E to visit the outpost. Walk south to its diamond and press E to return.
+5. Press **Esc** or click **Return to Menu**, then start again for a fresh session.
+
+No additional packages are required. Options and save/load are outside this MVP.
+See `docs/Sprint-1-Wiki.md` for scope, verification, and team follow-ups.
+
+To run the regression smoke check after importing assets:
+
+```sh
+godot --headless --path . --script res://tests/sprint1_smoke.gd
+```
+
+The initial progress and two-week goal above are historical proposals, not a completion report. The implemented Sprint 1 status is documented in the Wiki draft.
 
 ## Credits
 PetriCake Games for the tile map set, https://petricakegames.itch.io/cosmic-lilac

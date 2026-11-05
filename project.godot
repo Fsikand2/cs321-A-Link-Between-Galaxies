@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="ALinkBetweenGalaxys"
-run/main_scene="uid://plwrj2rs4i85"
+run/main_scene="res://scenes/home_menu.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 

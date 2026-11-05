@@ -3,7 +3,11 @@
 [ext_resource type="TileSet" uid="uid://w1qiv7fycj5a" path="res://assets/tile_sets/new_tile_set.tres" id="1_olt8n"]
 [ext_resource type="PackedScene" uid="uid://dfvryf18uxnoh" path="res://scenes/player.tscn" id="2_ktig4"]
 
+[ext_resource type="Script" path="res://scripts/demo_world.gd" id="3_demo"]
+
 [node name="HomeScreen" type="Node2D" unique_id=264422682]
+
+script = ExtResource("3_demo")
 
 [node name="Terrain" type="TileMapLayer" parent="." unique_id=1601637381]
 use_parent_material = true
