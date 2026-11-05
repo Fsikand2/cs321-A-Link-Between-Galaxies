@@ -83,6 +83,9 @@ These tasks and user stories are proposals to refine with our TA during the pre-
 
 Setup and run instructions will be added after we select the engine and create the initial prototype.
 
+## Credits
+PetriCake Games for the tile map set, https://petricakegames.itch.io/cosmic-lilac
+
 ## Course
 
 CS321 — Software Engineering  
