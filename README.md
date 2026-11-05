@@ -80,19 +80,18 @@ These tasks and user stories are proposals to refine with our TA during the pre-
 ## Running the Project
 
 1. Open `project.godot` in Godot 4.6 and allow asset import to finish.
-2. Press F6 only to test an individual scene; press **F5** for the complete menu flow.
+2. Press **F5** for the complete menu flow.
 3. Select **New Game**. Move with the arrow keys; press **E** to interact.
-4. Walk north from spawn toward the landing pad and press E to visit the outpost. Walk south to its landing pad and press E to return.
-5. Press **Esc** or click **Menu · Esc**, then start again for a fresh session.
+4. Walk north through the doorway. Find the key in the left alcove and press E while facing it. Use it on the locked chest blocking the northeast passage, then follow the passage north to the stairs.
+5. Press E near the stairs to enter the outpost. Use the stairs at the south end of the outpost to return.
+6. Press **Esc** or click **Menu · Esc**, then start again for a fresh session.
 
 No additional packages are required. Options and save/load are outside this MVP.
 See `docs/Sprint-1-Wiki.md` for scope, verification, and team follow-ups.
 
-To run the regression smoke check after importing assets:
+To edit the outpost, open `scenes/outpost.tscn` in Godot's 2D editor. Its tiles, decorations, entrance, and spawn marker are saved in the scene. The main world instances it; it does not generate the room in a script.
 
-```sh
-godot --headless --path . --script res://tests/sprint1_smoke.gd
-```
+Quick demo check: New Game → move → collect key → unlock chest → stairs to outpost → stairs back → Esc → New Game. No automated test suite or extra dependencies are required.
 
 The initial progress and two-week goal above are historical proposals, not a completion report. The implemented Sprint 1 status is documented in the Wiki draft.
 

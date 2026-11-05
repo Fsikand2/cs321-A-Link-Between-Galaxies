@@ -8,20 +8,20 @@ The README proposes movement, wall collisions, a key, and a locked door. It expl
 
 The user's Sprint 1 request calls for a working MVP covering a basic landing UI and movement between areas, plus documentation and team-managed checklist items. Their reports of Logan's and Farhan's suggestions are context, not independently verified instructor feedback. No separate storyboards, assignment documents, issue exports, task lists, or previous use case diagram were present locally. Remote issues/Wiki were not accessed or changed.
 
-Assumptions: a tiny planet/outpost exploration loop is sufficient for a demo; the landing pad and simple outpost are placeholders until storyboards are supplied; no Options is preferable to a button with no setting. These are implementation choices, not team or GTA-approved decisions.
+Assumptions: a tiny planet/outpost exploration loop is sufficient for a demo; the outpost layout is a placeholder until storyboards are supplied; the planet entrance uses the existing far-end stairs as requested following Logan’s feedback; no Options is preferable to a button with no setting. These are implementation choices, not team or GTA-approved decisions.
 
 ## Actual MVP
 
 - New Game and Quit menu with the correct game title and keyboard focus.
 - Existing astronaut, arrow-key movement, tile world, assets, and interaction sounds.
 - Existing tile collisions plus explicit outer boundaries for both areas.
-- Landing pads: E near the planet portal visits the outpost; E near the outpost portal returns.
+- Stair entrances: E near the far-north planet stairs visits the outpost; E near the outpost’s south stairs returns. The former landing pads have been removed.
 - Visible controls, location, portal prompt, and current key count.
 - Existing key pickups and locked chests. Exploration state persists while traveling between areas in one session.
 - Escape or the menu button; New Game starts a fresh world with keys/chests restored.
 - No save/load, Options, combat, accounts, networking, ship upgrades, or full inventory.
 
-The two areas share a scene and use teleportation between distant map locations. Keeping both loaded is a small implementation that preserves the current session's changed tiles without introducing a save system.
+The outpost is authored in its own `scenes/outpost.tscn` and instanced by the main world. Both areas stay loaded, preserving the current session’s changed tiles and keys without a save system.
 
 ## Implementation summary
 
@@ -30,11 +30,11 @@ The two areas share a scene and use teleportation between distant map locations.
 | `project.godot` | Existing input actions/renderer retained; main scene uses an explicit resource path for first import. |
 | `scenes/home_menu.tscn` | Correct title, New Game, Quit; remove inactive Load. |
 | `scripts/main_menu.gd` | Focus New Game; existing scene start and quit callbacks. |
-| `scenes/testworld.tscn` | Existing authored tile data and player preserved; attach demo controller. |
-| `scripts/demo_world.gd` | Small outpost using existing tiles, labeled portals, travel, boundary guards, HUD, menu return. |
+| `scenes/testworld.tscn` | Original map and player, outpost scene instance, stair entrance/return markers; one starting-room wall tile opened as a doorway. |
+| `scenes/outpost.tscn` | Editable tile-built room, props, labels, stair entrance, and arrival marker. |
+| `scripts/demo_world.gd` | Travel using scene markers, boundary guards, HUD, menu return. No runtime room generation. |
 | `scripts/player.gd` | Preserve movement/key/chest systems; animate vertical movement and convert interaction position into decoration-local coordinates. |
 | `scenes/player.tscn`, `assets/` | Reused unchanged. |
-| `tests/sprint1_smoke.gd` | Godot integration smoke check using input actions, scene changes, actual tiles, and reset assertions. |
 
 ## Challenges encountered
 
@@ -48,23 +48,17 @@ The two areas share a scene and use teleportation between distant map locations.
 
 1. Open `project.godot` with Godot 4.6, finish import, press **F5**.
 2. Select **New Game**. Point out the controls and key count.
-3. Use the arrow keys to move; walk north about 20–30 world pixels from spawn toward the landing pad.
-4. Press **E** near the diamond. The location changes to Outpost.
-5. Walk around the small room and toward its edges to show boundaries. Walk south toward the landing pad and press **E** to return.
-6. Optionally explore the existing planet keys/chests: face a neighboring key tile and press E; face a locked chest and press E to spend a key. This is existing interaction behavior, not a new inventory system.
+3. Walk north through the new starting-room doorway into the larger room. Head to the left alcove: face the key from below and press **E** to collect it.
+4. Head to the northeast passage. Face the locked chest from below and press **E** to spend the key and open the route.
+5. Follow the passage north to the existing stairs at the far end. When the prompt appears, press **E** to enter the outpost.
+6. Explore the outpost, then approach its south-end stairs and press **E** to return. Arrival points are outside the interaction radius to avoid immediate retriggering.
 7. Press **Esc**, or click **Menu · Esc**. Select **New Game** again to show a fresh session.
 
-## Verification
+## Simple demo checklist
 
-Godot 4.6 asset import completed. Automated headless checks exercise menu loading and its New Game signal, arrow movement from spawn to the portal, E travel to the outpost and back, outpost boundary containment, planet outer bounds, existing decoration collision, key pickup, keyed chest removal, Escape to menu, fresh-session key/tile reset, and the menu button's callback. The test exits nonzero for failed assertions.
+Run with F5: menu → New Game → movement → key pickup → unlock the passage → far-end stairs → outpost → south stairs back → Esc → New Game. Check that the player remains visible, the floor renders, walls block movement, and New Game restores the key/chest.
 
-After importing assets, run from the repository:
-
-```sh
-godot --headless --path . --script res://tests/sprint1_smoke.gd
-```
-
-Validation limitations: headless assertions do not establish visual quality, audible playback, mouse hit targets, human keyboard feel, or storyboard fidelity. Escape is injected as a keyboard event; movement/interact use Godot input actions. The menu signal/callback is exercised programmatically. A teammate must perform the walkthrough in a graphical Godot session. This is an exploration MVP with no win condition. Map interiors remain as authored; only outer bounds are added.
+During implementation, headless checks passed the walking route, key/chest progression, both stair transitions, arrival spacing, room scene instancing/draw order, bounds, and session reset. The automated suite was then removed at the user's request to keep this school project small. There are no testing dependencies. A hands-on visual/audio walkthrough remains necessary; those checks did not establish visual quality or audible playback.
 
 ## Proposed revised use case diagram
 
@@ -119,3 +113,9 @@ The bundled `addons/github-integration` plugin contains Godot 3 editor scripts a
 ## Visual polish follow-up
 
 Replaced the temporary diamond markers with the existing purple platform artwork, presented as transfer landing pads. The planet pad remains north of spawn on the original walkable floor. The outpost now has metal floor panels, collidable storage lockers/supply props placed away from the central walking route, and small area labels. A nearby prompt reads “Press E to enter outpost” or “Press E to return to planet” and hides when out of reach. A compact top-left location/key/menu bar and bottom-left movement/interaction hint replace the large instruction stack. Both directions of travel, original key/chest behavior, boundaries, and session reset remain unchanged. These decorations add no new inventory, mission, or supply interactions.
+
+## Scene and stair follow-up
+
+Following Logan’s feedback as relayed by the user, moved the outpost’s room tiles, props, labels, stairs, and spawn marker into an editable `outpost.tscn`. Removed runtime room generation and both landing pads. Planet travel now uses the original stair tile at Terrain cell (26, 15); return spawns just south of it. Outpost travel uses its south stair, with arrival farther inside the room.
+
+Checking the full walking route revealed that the original starting pocket was sealed. Removed only Decoration cell (23, 30) to create a one-tile doorway; the rest of the authored map, key pickups, and locked chests remain intact. Reaching the far-end stairs uses the existing key/chest progression. The earlier polish notes describe a previous iteration; the current demo uses stairs and an authored scene.
