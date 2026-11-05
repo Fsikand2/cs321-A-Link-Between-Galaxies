@@ -119,3 +119,7 @@ Replaced the temporary diamond markers with the existing purple platform artwork
 Following Logan’s feedback as relayed by the user, moved the outpost’s room tiles, props, labels, stairs, and spawn marker into an editable `outpost.tscn`. Removed runtime room generation and both landing pads. Planet travel now uses the original stair tile at Terrain cell (26, 15); return spawns just south of it. Outpost travel uses its south stair, with arrival farther inside the room.
 
 Checking the full walking route revealed that the original starting pocket was sealed. Removed only Decoration cell (23, 30) to create a one-tile doorway; the rest of the authored map, key pickups, and locked chests remain intact. Reaching the far-end stairs uses the existing key/chest progression. The earlier polish notes describe a previous iteration; the current demo uses stairs and an authored scene.
+
+## Space background follow-up
+
+Changed the outpost floor to the quieter existing metal panel tile (7, 1). Added an editor-visible, non-colliding Space tile layer behind the room using sparse stars from the existing tileset. The project background is now dark navy rather than gray, matching the space artwork even outside the star layer. Room layout, collisions, stairs, props, and travel behavior are unchanged. No assets, dependencies, or automated tests were added.

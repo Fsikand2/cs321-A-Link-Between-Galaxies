@@ -54,6 +54,8 @@ down={
 
 [rendering]
 
+environment/defaults/default_clear_color = Color(0.094, 0.125, 0.337, 1)
+
 rendering_device/driver.windows="d3d12"
 textures/vram_compression/import_s3tc_bptc=true
 textures/vram_compression/import_etc2_astc=true
