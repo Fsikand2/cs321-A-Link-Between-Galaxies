@@ -8,17 +8,17 @@ The README proposes movement, wall collisions, a key, and a locked door. It expl
 
 The user's Sprint 1 request calls for a working MVP covering a basic landing UI and movement between areas, plus documentation and team-managed checklist items. Their reports of Logan's and Farhan's suggestions are context, not independently verified instructor feedback. No separate storyboards, assignment documents, issue exports, task lists, or previous use case diagram were present locally. Remote issues/Wiki were not accessed or changed.
 
-Assumptions: a tiny planet/outpost exploration loop is sufficient for a demo; the cyan portal and simple outpost are placeholders until storyboards are supplied; no Options is preferable to a button with no setting. These are implementation choices, not team or GTA-approved decisions.
+Assumptions: a tiny planet/outpost exploration loop is sufficient for a demo; the landing pad and simple outpost are placeholders until storyboards are supplied; no Options is preferable to a button with no setting. These are implementation choices, not team or GTA-approved decisions.
 
 ## Actual MVP
 
 - New Game and Quit menu with the correct game title and keyboard focus.
 - Existing astronaut, arrow-key movement, tile world, assets, and interaction sounds.
 - Existing tile collisions plus explicit outer boundaries for both areas.
-- Cyan portals: E near the planet portal visits the outpost; E near the outpost portal returns.
+- Landing pads: E near the planet portal visits the outpost; E near the outpost portal returns.
 - Visible controls, location, portal prompt, and current key count.
 - Existing key pickups and locked chests. Exploration state persists while traveling between areas in one session.
-- Escape or Return to Menu; New Game starts a fresh world with keys/chests restored.
+- Escape or the menu button; New Game starts a fresh world with keys/chests restored.
 - No save/load, Options, combat, accounts, networking, ship upgrades, or full inventory.
 
 The two areas share a scene and use teleportation between distant map locations. Keeping both loaded is a small implementation that preserves the current session's changed tiles without introducing a save system.
@@ -48,11 +48,11 @@ The two areas share a scene and use teleportation between distant map locations.
 
 1. Open `project.godot` with Godot 4.6, finish import, press **F5**.
 2. Select **New Game**. Point out the controls and key count.
-3. Use the arrow keys to move; walk north about 20–30 world pixels from spawn toward the cyan diamond.
+3. Use the arrow keys to move; walk north about 20–30 world pixels from spawn toward the landing pad.
 4. Press **E** near the diamond. The location changes to Outpost.
-5. Walk around the small room and toward its edges to show boundaries. Walk south toward the cyan diamond and press **E** to return.
+5. Walk around the small room and toward its edges to show boundaries. Walk south toward the landing pad and press **E** to return.
 6. Optionally explore the existing planet keys/chests: face a neighboring key tile and press E; face a locked chest and press E to spend a key. This is existing interaction behavior, not a new inventory system.
-7. Press **Esc**, or click **Return to Menu**. Select **New Game** again to show a fresh session.
+7. Press **Esc**, or click **Menu · Esc**. Select **New Game** again to show a fresh session.
 
 ## Verification
 
@@ -115,3 +115,7 @@ Unassigned proposals; no invented issue numbers or commitments:
 ## Editor compatibility follow-up
 
 The bundled `addons/github-integration` plugin contains Godot 3 editor scripts and visual-shader resources. Its `graph_offset` deprecation and invalid shader output-port errors originate in those legacy resources. A `.gdignore` excludes that unused editor-only folder from Godot 4 scanning while preserving its files. The game does not reference the plugin. Restart the editor after this change; use the team’s usual Git client for repository operations.
+
+## Visual polish follow-up
+
+Replaced the temporary diamond markers with the existing purple platform artwork, presented as transfer landing pads. The planet pad remains north of spawn on the original walkable floor. The outpost now has metal floor panels, collidable storage lockers/supply props placed away from the central walking route, and small area labels. A nearby prompt reads “Press E to enter outpost” or “Press E to return to planet” and hides when out of reach. A compact top-left location/key/menu bar and bottom-left movement/interaction hint replace the large instruction stack. Both directions of travel, original key/chest behavior, boundaries, and session reset remain unchanged. These decorations add no new inventory, mission, or supply interactions.

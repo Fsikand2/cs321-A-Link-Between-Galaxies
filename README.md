@@ -82,8 +82,8 @@ These tasks and user stories are proposals to refine with our TA during the pre-
 1. Open `project.godot` in Godot 4.6 and allow asset import to finish.
 2. Press F6 only to test an individual scene; press **F5** for the complete menu flow.
 3. Select **New Game**. Move with the arrow keys; press **E** to interact.
-4. Walk north from spawn toward the cyan diamond and press E to visit the outpost. Walk south to its diamond and press E to return.
-5. Press **Esc** or click **Return to Menu**, then start again for a fresh session.
+4. Walk north from spawn toward the landing pad and press E to visit the outpost. Walk south to its landing pad and press E to return.
+5. Press **Esc** or click **Menu · Esc**, then start again for a fresh session.
 
 No additional packages are required. Options and save/load are outside this MVP.
 See `docs/Sprint-1-Wiki.md` for scope, verification, and team follow-ups.
