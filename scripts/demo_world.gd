@@ -1,24 +1,13 @@
 extends Node2D
-# Both areas stay loaded so keys and opened chests survive the round trip.
-const HOME_BOUNDS := Rect2(54, 96, 688, 576)
-const OUTPOST_BOUNDS := Rect2(1016, 496, 224, 160)
-const TRAVEL_DISTANCE := 24.0
-var in_outpost := false
+
+# Keep the astronaut inside the map; tile collisions handle individual walls.
+const PLAYABLE_BOUNDS := Rect2(54, 96, 688, 576)
+const PLAYER_MARGIN := Vector2(8, 10)
 var status: Label
-var portal_hint: Label
 @onready var player: CharacterBody2D = $Player
 
 func _ready() -> void:
 	build_hud()
-	portal_hint = Label.new()
-	portal_hint.name = "EntrancePrompt"
-	portal_hint.scale = Vector2.ONE / 3.0
-	portal_hint.add_theme_color_override("font_color", Color("fff1ce"))
-	portal_hint.add_theme_color_override("font_shadow_color", Color("171b3b"))
-	portal_hint.add_theme_constant_override("shadow_offset_x", 2)
-	portal_hint.add_theme_constant_override("shadow_offset_y", 2)
-	portal_hint.z_index = 10
-	add_child(portal_hint)
 
 func hud_style() -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
@@ -68,22 +57,11 @@ func build_hud() -> void:
 	controls.add_child(hint)
 
 func _physics_process(_delta: float) -> void:
-	# Outer guards supplement the authored tile collisions.
-	var bounds := OUTPOST_BOUNDS if in_outpost else HOME_BOUNDS
-	player.position = player.position.clamp(bounds.position + Vector2(8, 10), bounds.end - Vector2(8, 10))
-	var entrance: Marker2D = $Outpost/Entrance if in_outpost else $Terrain/StairsEntrance
-	var portal := entrance.global_position
-	var near_portal := player.position.distance_to(portal) < TRAVEL_DISTANCE
-	status.text = ("Outpost 01" if in_outpost else "Planet surface") + "   |   Keys: " + str(player.keys)
-	portal_hint.visible = near_portal
-	portal_hint.text = "Press E to return to planet" if in_outpost else "Press E to enter outpost"
-	portal_hint.position = portal + Vector2(-portal_hint.get_minimum_size().x / 6.0, -38)
-	if near_portal and Input.is_action_just_pressed("interact"):
-		in_outpost = not in_outpost
-		var spawn: Marker2D = $Outpost/SpawnPoint if in_outpost else $Terrain/StairsReturn
-		player.global_position = spawn.global_position
-		player.velocity = Vector2.ZERO
-		player.get_node("Camera2D").reset_smoothing()
+	player.position = player.position.clamp(
+		PLAYABLE_BOUNDS.position + PLAYER_MARGIN,
+		PLAYABLE_BOUNDS.end - PLAYER_MARGIN
+	)
+	status.text = "Keys: " + str(player.keys)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):

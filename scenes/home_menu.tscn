@@ -24,12 +24,16 @@ layout_mode = 2
 [node name="Label" type="Label" parent="VBoxContainer" unique_id=1274507731]
 layout_mode = 2
 size_flags_horizontal = 4
-text = "A Link Between Galaxies
+text = "A Link Between Worlds
 "
 
 [node name="play" type="Button" parent="VBoxContainer" unique_id=2092204265]
 layout_mode = 2
-text = "New Game"
+text = "Play"
+
+[node name="load" type="Button" parent="VBoxContainer" unique_id=762667617]
+layout_mode = 2
+text = "Load"
 
 [node name="quit" type="Button" parent="VBoxContainer" unique_id=1432165198]
 layout_mode = 2

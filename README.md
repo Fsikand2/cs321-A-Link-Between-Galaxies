@@ -36,7 +36,9 @@ These features describe our current plan. The final scope may change based on te
 
 ## Development Platform
 
-Godot 4.6 with GDScript, 2D TileMapLayer levels, and the existing Forward Plus renderer.
+We have not selected a game engine yet. Options under consideration include Godot, Unreal Engine, and Roblox Studio.
+
+We will update this section with the selected engine, programming language, and setup instructions once those decisions are made.
 
 ## Current Progress
 
@@ -79,21 +81,7 @@ These tasks and user stories are proposals to refine with our TA during the pre-
 
 ## Running the Project
 
-1. Open `project.godot` in Godot 4.6 and allow asset import to finish.
-2. Press **F5** for the complete menu flow.
-3. Select **New Game**. Move with the arrow keys; press **E** to interact.
-4. Walk north through the doorway. Find the key in the left alcove and press E while facing it. Use it on the locked chest blocking the northeast passage, then follow the passage north to the stairs.
-5. Press E near the stairs to enter the outpost. Use the stairs at the south end of the outpost to return.
-6. Press **Esc** or click **Menu · Esc**, then start again for a fresh session.
-
-No additional packages are required. Options and save/load are outside this MVP.
-See `docs/Sprint-1-Wiki.md` for scope, verification, and team follow-ups.
-
-To edit the outpost, open `scenes/outpost.tscn` in Godot's 2D editor. Its tiles, decorations, entrance, and spawn marker are saved in the scene. The main world instances it; it does not generate the room in a script.
-
-Quick demo check: New Game → move → collect key → unlock chest → stairs to outpost → stairs back → Esc → New Game. No automated test suite or extra dependencies are required.
-
-The initial progress and two-week goal above are historical proposals, not a completion report. The implemented Sprint 1 status is documented in the Wiki draft.
+Setup and run instructions will be added after we select the engine and create the initial prototype.
 
 ## Credits
 PetriCake Games for the tile map set, https://petricakegames.itch.io/cosmic-lilac

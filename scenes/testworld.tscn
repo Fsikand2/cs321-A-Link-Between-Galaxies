@@ -5,14 +5,9 @@
 
 [ext_resource type="Script" path="res://scripts/demo_world.gd" id="3_demo"]
 
-[ext_resource type="PackedScene" path="res://scenes/outpost.tscn" id="4_outpost"]
-
 [node name="HomeScreen" type="Node2D" unique_id=264422682]
 
 script = ExtResource("3_demo")
-
-[node name="Outpost" parent="." instance=ExtResource("4_outpost")]
-position = Vector2(1000, 480)
 
 [node name="Terrain" type="TileMapLayer" parent="." unique_id=1601637381]
 use_parent_material = true
@@ -26,9 +21,3 @@ position = Vector2(376, 552)
 [node name="Decoration" type="TileMapLayer" parent="." unique_id=1248860389]
 tile_map_data = PackedByteArray("AAAaABAAAAAMAAIAAAAcABAAAAAMAAIAAAAcAA8AAAAMAAEAAAAaAA8AAAAMAAEAAAAaABkAAAABAAEAAAAcABkAAAABAAEAAAAWABoAAAAIAAQAAAAXABoAAAAJAAQAAAAYABoAAAAJAAQAAAAZABoAAAAKAAQAAAATABoAAAAKAAIAAAAVABoAAAAKAAIAAAAVABkAAAAKAAEAAAATABkAAAAKAAEAAAAUABkAAAAMAAQAAAAcAB8AAAAMAAQAAAAXAB8AAAAIAAQAAAAYAB8AAAAKAAQAAAAaAB8AAAAKAAMAAAAYAB4AAAABAAEAAAAZAB4AAAABAAEAAAAaAB4AAAABAAEAAAAbAB4AAAABAAEAAAAcAB4AAAABAAEAAAAZAB8AAAABAAEAAAAZACEAAAABAAEAAAAZACIAAAABAAEAAAATAB4AAAABAAEAAAAUAB4AAAAEAAIAAAA=")
 tile_set = ExtResource("1_olt8n")
-
-[node name="StairsEntrance" type="Marker2D" parent="Terrain"]
-position = Vector2(424, 248)
-
-[node name="StairsReturn" type="Marker2D" parent="Terrain"]
-position = Vector2(424, 280)

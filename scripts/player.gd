@@ -11,14 +11,14 @@ var look_at_dir := Vector2.DOWN
 @onready var failure: AudioStreamPlayer2D = $failure
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	process_interaction()
 	process_movement()
 	move_and_slide()
 
 func process_interaction():
 	var pos = get_global_position() + look_at_dir * 16
-	var cell = decoration.local_to_map(decoration.to_local(pos))
+	var cell = decoration.local_to_map(pos)
 	var tile_data = decoration.get_cell_tile_data(cell)
 	
 	if tile_data == null: return
@@ -51,4 +51,4 @@ func process_animation(dir: Vector2) -> void:
 func play_animation(dir: Vector2) -> void:
 	if dir.x != 0:
 		animated_sprite_2d.flip_h = dir.x < 0
-	animated_sprite_2d.play("moving")
+		animated_sprite_2d.play("moving")
