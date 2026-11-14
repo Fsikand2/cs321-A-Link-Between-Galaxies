@@ -90,3 +90,14 @@ PetriCake Games for the tile map set, https://petricakegames.itch.io/cosmic-lila
 
 CS321 — Software Engineering  
 Fall 2026
+
+## Saving and Loading the Prototype
+
+Open `project.godot` in Godot 4.6 and run the project.
+
+- **New Game** starts at the original spawn with no keys and a fresh map.
+- **Load Game** restores your position, keys, opened objects, and game-over state. It is disabled if no valid save exists.
+- **Save & Menu**, Escape, and closing the game window save your progress.
+- There is one save slot. Saving a new game replaces the previous save.
+
+Save data is stored in `user://save.json`, in Godot's application data folder. Older prototype saves only stored a score and position; start a New Game to create a complete save.

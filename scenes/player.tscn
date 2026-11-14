@@ -283,7 +283,7 @@ horizontal_alignment = 1
 
 [node name="Button" type="Button" parent="Camera2D/VBoxContainer" unique_id=389313701]
 layout_mode = 2
-text = "Exit"
+text = "Save & Menu"
 
 [node name="Pickup_Success" type="AudioStreamPlayer2D" parent="." unique_id=1663343041]
 stream = ExtResource("3_insbl")

@@ -7,6 +7,7 @@ var status: Label
 @onready var player: CharacterBody2D = $Player
 
 func _ready() -> void:
+	get_tree().auto_accept_quit = false
 	build_hud()
 
 func hud_style() -> StyleBoxFlat:
@@ -40,7 +41,7 @@ func build_hud() -> void:
 	status.add_theme_color_override("font_color", Color("fff1ce"))
 	row.add_child(status)
 	var menu := Button.new()
-	menu.text = "Menu · Esc"
+	menu.text = "Save & Menu · Esc"
 	menu.focus_mode = Control.FOCUS_NONE
 	menu.pressed.connect(return_to_menu)
 	row.add_child(menu)
@@ -69,4 +70,15 @@ func _unhandled_input(event: InputEvent) -> void:
 		
 
 func return_to_menu() -> void:
+	if not player.save_data():
+		$SaveError.popup_centered()
+		return
+	get_tree().auto_accept_quit = true
 	get_tree().change_scene_to_file("res://scenes/home_menu.tscn")
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		if player.save_data():
+			get_tree().quit()
+		else:
+			$SaveError.popup_centered()

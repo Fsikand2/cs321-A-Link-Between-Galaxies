@@ -2,8 +2,6 @@ extends CharacterBody2D
 
 # _________________SIMPLE FIXES___________________
 # 2) Add good load screen background image
-# 3) Either dont make going to the menu reset you or put "exit to menu"
-# 	 so the player knows his game wont continue where it left out
 # 4) Get rid of the pre-existing hole in the wall so you have to break the block 
 #    to progress
 # 5) Add a delay from when you stop moving to when your charachter starts its 
@@ -14,7 +12,8 @@ extends CharacterBody2D
 const SPEED = 50.0
 var keys = 0;
 var look_at_dir := Vector2.DOWN
-var is_game_over = false;
+var is_game_over = false
+var removed_cells: Array = []
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var decoration: TileMapLayer = $"../Decoration"
@@ -25,13 +24,17 @@ var is_game_over = false;
 @onready var label_2: Label = $Camera2D/VBoxContainer/Label2
 
 func _ready() -> void:
-	load_data()
+	if not SaveGame.data_to_load.is_empty():
+		load_data(SaveGame.data_to_load)
+	SaveGame.data_to_load = {}
 
 func _physics_process(delta: float) -> void:
 	if is_game_over == true:
 		return;
 	
 	process_interaction()
+	if is_game_over:
+		return
 	process_movement()
 	move_and_slide()
 	
@@ -42,44 +45,51 @@ func game_over():
 	v_box_container.show()
 	button.grab_focus()
 
-func save_data():
-	var save_data = {
-		"score": keys * 100,
+func save_data() -> bool:
+	var data = {
+		"keys": keys,
 		"position_x": global_position.x,
-		"position_y": global_position.y
-		}
-	var file = FileAccess.open("user://save.json", FileAccess.WRITE)
-	file.store_string(JSON.stringify(save_data))
-	file.close()
-	
-func load_data():
-	if not FileAccess.file_exists("user://save.json"):
-		return
-		
-	var file = FileAccess.open("user://save.json", FileAccess.READ)
-	var save_data = JSON.parse_string(file.get_as_text())
-	file.close()
+		"position_y": global_position.y,
+		"removed_cells": removed_cells,
+		"game_over": is_game_over
+	}
+	var file = FileAccess.open(SaveGame.SAVE_PATH + ".tmp", FileAccess.WRITE)
+	if file == null:
+		return false
 
-	if save_data == null or not save_data is Dictionary:
-		return
-		
-	keys = int(save_data.get("score", 0) / 100)
-	
-	global_position = Vector2(
-		save_data.get("position_x", 0),
-		 save_data.get("position_y", 0)
-		)
+	file.store_string(JSON.stringify(data))
+	file.flush()
+	var write_error = file.get_error()
+	file.close()
+	if write_error != OK:
+		return false
+
+	var result = DirAccess.rename_absolute(
+		ProjectSettings.globalize_path(SaveGame.SAVE_PATH + ".tmp"),
+		ProjectSettings.globalize_path(SaveGame.SAVE_PATH)
+	)
+	return result == OK
+
+func load_data(data: Dictionary) -> void:
+	keys = int(data["keys"])
+	global_position = Vector2(data["position_x"], data["position_y"])
+	removed_cells = data["removed_cells"]
+	for cell in removed_cells:
+		decoration.erase_cell(Vector2i(int(cell[0]), int(cell[1])))
+	if data["game_over"]:
+		game_over()
 
 func process_interaction():
 	var pos = get_global_position() + look_at_dir * 16
-	var cell = decoration.local_to_map(pos)
+	var cell = decoration.local_to_map(decoration.to_local(pos))
 	var tile_data = decoration.get_cell_tile_data(cell)
 	
 	if tile_data == null: return
 	var tile_id = tile_data.get_custom_data("chests")
 	
-	if tile_id ==  3:
+	if tile_id == 3:
 		game_over()
+		return
 		
 	
 	if Input.is_action_just_pressed("interact"):
@@ -87,10 +97,12 @@ func process_interaction():
 			keys += 1
 			pickup_success.play()
 			decoration.erase_cell(cell)
+			removed_cells.append([cell.x, cell.y])
 		elif tile_id == 2 and keys > 0:
 			keys -= 1
 			pickup_success.play()
 			decoration.erase_cell(cell)
+			removed_cells.append([cell.x, cell.y])
 		else:
 			failure.play();
 
@@ -114,5 +126,4 @@ func play_animation(dir: Vector2) -> void:
 
 
 func _on_button_pressed() -> void:
-	save_data()
-	get_tree().change_scene_to_file("res://scenes/home_menu.tscn")
+	get_parent().return_to_menu()
