@@ -80,6 +80,12 @@ func load_data(data: Dictionary) -> void:
 		game_over()
 
 func process_interaction():
+	# Pressure plates: press the button you're standing on
+	var under_cell = decoration.local_to_map(decoration.to_local(global_position))
+	var under_data = decoration.get_cell_tile_data(under_cell)
+	if under_data and under_data.get_custom_data("chests") == 4:
+		press_button(under_cell)
+
 	var pos = get_global_position() + look_at_dir * 16
 	var cell = decoration.local_to_map(decoration.to_local(pos))
 	var tile_data = decoration.get_cell_tile_data(cell)
@@ -103,6 +109,8 @@ func process_interaction():
 			pickup_success.play()
 			decoration.erase_cell(cell)
 			removed_cells.append([cell.x, cell.y])
+		elif tile_id == 4:  # button (facing it + E also works)
+			press_button(cell)
 		else:
 			failure.play();
 
@@ -127,3 +135,27 @@ func play_animation(dir: Vector2) -> void:
 
 func _on_button_pressed() -> void:
 	get_parent().return_to_menu()
+
+func count_tiles(id: int) -> int:
+	var count := 0
+	for c in decoration.get_used_cells():
+		var data := decoration.get_cell_tile_data(c)
+		if data and data.get_custom_data("chests") == id:
+			count += 1
+	return count
+
+func open_button_doors() -> void:
+	var opened := 0
+	for door_cell in decoration.get_used_cells():
+		var data := decoration.get_cell_tile_data(door_cell)
+		if data and data.get_custom_data("chests") == 5:
+			decoration.erase_cell(door_cell)
+			removed_cells.append([door_cell.x, door_cell.y])
+			opened += 1
+
+func press_button(cell: Vector2i) -> void:
+	pickup_success.play()
+	decoration.erase_cell(cell)
+	removed_cells.append([cell.x, cell.y])
+	if count_tiles(4) == 0:  # all buttons pressed
+		open_button_doors()
