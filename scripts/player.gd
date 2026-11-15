@@ -1,19 +1,15 @@
 extends CharacterBody2D
 
-# _________________SIMPLE FIXES___________________
-# 2) Add good load screen background image
-# 4) Get rid of the pre-existing hole in the wall so you have to break the block 
-#    to progress
-# 5) Add a delay from when you stop moving to when your charachter starts its 
-#	 idle animation
-# 6) Make the text box wider to fit the title text and center the text too
-
-
 const SPEED = 50.0
 var keys = 0;
 var look_at_dir := Vector2.DOWN
 var is_game_over = false
 var removed_cells: Array = []
+
+@export var projectile_scene: PackedScene
+@export var shoot_cooldown: float = 0.3
+
+var shoot_timer: float = 0.0
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var decoration: TileMapLayer = $"../Decoration"
@@ -33,10 +29,28 @@ func _physics_process(delta: float) -> void:
 		return;
 	
 	process_interaction()
-	if is_game_over:
-		return
+	
+	if shoot_timer > 0:
+		shoot_timer -= delta
+
+	if Input.is_action_pressed("shoot") and shoot_timer <= 0:
+		shoot()
+		shoot_timer = shoot_cooldown
+		
 	process_movement()
+		
 	move_and_slide()
+	
+func shoot():
+	if projectile_scene == null:
+		return
+
+	var projectile = projectile_scene.instantiate()
+
+	get_parent().add_child(projectile)
+
+	projectile.global_position = global_position + look_at_dir * 16
+	projectile.direction = look_at_dir.normalized()
 	
 func game_over():
 	is_game_over = true
@@ -98,7 +112,7 @@ func process_interaction():
 			pickup_success.play()
 			decoration.erase_cell(cell)
 			removed_cells.append([cell.x, cell.y])
-		elif tile_id == 2 and keys > 0:
+		elif tile_id == 4 and keys > 0:
 			keys -= 1
 			pickup_success.play()
 			decoration.erase_cell(cell)

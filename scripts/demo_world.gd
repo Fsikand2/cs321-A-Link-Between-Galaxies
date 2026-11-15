@@ -5,10 +5,32 @@ const PLAYABLE_BOUNDS := Rect2(54, 96, 688, 576)
 const PLAYER_MARGIN := Vector2(8, 10)
 var status: Label
 @onready var player: CharacterBody2D = $Player
+@onready var decoration: TileMapLayer = $Decoration
 
+var enemies_killed: int = 0
+const TOTAL_ENEMIES: int = 3
+@onready var enemies = [$Slime_room1, $Slime_room2, $Slime_room3]
+
+func _on_enemy_died() -> void:
+	enemies_killed += 1
+	if enemies_killed >= TOTAL_ENEMIES:
+		all_enemies_killed()
+		
 func _ready() -> void:
 	get_tree().auto_accept_quit = false
 	build_hud()
+	for enemy in enemies:
+		enemy.died.connect(_on_enemy_died)
+		
+
+		
+func all_enemies_killed():
+	var cell = Vector2i(16,33); ##chest location
+	var source_id = 0
+	var atlas_coords = Vector2i(12, 4)
+	decoration.set_cell(cell, source_id, atlas_coords)
+	
+	
 
 func hud_style() -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
@@ -53,7 +75,7 @@ func build_hud() -> void:
 	controls.offset_bottom = -16
 	controls.add_theme_stylebox_override("panel", hud_style())
 	var hint := Label.new()
-	hint.text = "Arrows  Move     E  Interact"
+	hint.text = "Arrows  Move     X  Interact     Z Shoot"
 	hint.add_theme_font_size_override("font_size", 14)
 	controls.add_child(hint)
 

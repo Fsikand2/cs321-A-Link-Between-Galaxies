@@ -3,12 +3,12 @@
 [ext_resource type="TileSet" uid="uid://w1qiv7fycj5a" path="res://assets/tile_sets/new_tile_set.tres" id="1_olt8n"]
 [ext_resource type="PackedScene" uid="uid://dfvryf18uxnoh" path="res://scenes/player.tscn" id="2_ktig4"]
 [ext_resource type="Script" uid="uid://qrwydfjtpxiy" path="res://scripts/demo_world.gd" id="3_demo"]
+[ext_resource type="PackedScene" uid="uid://bbmnvco114ksd" path="res://scenes/slime_green.tscn" id="4_4ccfe"]
+[ext_resource type="PackedScene" uid="uid://bjngpoyhfqbw1" path="res://scenes/projectile.tscn" id="4_y52uh"]
+[ext_resource type="AudioStream" uid="uid://ct33yghb8ek04" path="res://assets/sound/music.mp3" id="6_0q2lx"]
 
 [node name="HomeScreen" type="Node2D" unique_id=264422682]
 script = ExtResource("3_demo")
-
-[node name="Player" parent="." unique_id=512604986 instance=ExtResource("2_ktig4")]
-position = Vector2(440, 712)
 
 [node name="SaveError" type="AcceptDialog" parent="." unique_id=1322935356]
 oversampling_override = 1.0
@@ -23,5 +23,22 @@ tile_map_data = PackedByteArray("AAAaABAAAAAHAAMAAAAaABEAAAAHAAMAAAAaABIAAAAHAAM
 tile_set = ExtResource("1_olt8n")
 
 [node name="Decoration" type="TileMapLayer" parent="." unique_id=1248860389]
-tile_map_data = PackedByteArray("AAAaABAAAAAMAAIAAAAcABAAAAAMAAIAAAAcAA8AAAAMAAEAAAAaAA8AAAAMAAEAAAAaABkAAAABAAEAAAAcABkAAAABAAEAAAAbABkAAAAEAAIAAAAbAA8AAAAKAAAAAAApACEAAAAEAAIAAAAbACMAAAANAAAAAAAaACkAAAABAAEAAAAcACkAAAABAAEAAAAaACMAAAABAAEAAAAcACMAAAABAAEAAAAQACEAAAAMAAQAAAAuACEAAAAMAAQAAAAqABcAAAAKAAMAAAAnACUAAAAMAAQAAAA=")
+tile_map_data = PackedByteArray("AAAaABAAAAAMAAIAAAAcABAAAAAMAAIAAAAcAA8AAAAMAAEAAAAaAA8AAAAMAAEAAAAaABkAAAABAAEAAAAcABkAAAABAAEAAAAbABkAAAAEAAIAAAAbAA8AAAAKAAAAAAApACEAAAAEAAIAAAAbACMAAAANAAAAAAAaACkAAAABAAEAAAAcACkAAAABAAEAAAAaACMAAAABAAEAAAAcACMAAAABAAEAAAAuACEAAAAMAAQAAAAqABcAAAAKAAMAAAAnACUAAAAMAAQAAAApACIAAAABAAEAAAApACAAAAABAAEAAAA=")
 tile_set = ExtResource("1_olt8n")
+
+[node name="Player" parent="." unique_id=512604986 groups=["player"] instance=ExtResource("2_ktig4")]
+position = Vector2(440, 712)
+projectile_scene = ExtResource("4_y52uh")
+
+[node name="Slime_room1" parent="." unique_id=527563956 instance=ExtResource("4_4ccfe")]
+position = Vector2(240, 560)
+
+[node name="Slime_room2" parent="." unique_id=1859045247 instance=ExtResource("4_4ccfe")]
+position = Vector2(264, 608)
+
+[node name="Slime_room3" parent="." unique_id=1429956630 instance=ExtResource("4_4ccfe")]
+position = Vector2(288, 560)
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=752413793]
+stream = ExtResource("6_0q2lx")
+autoplay = true
