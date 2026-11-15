@@ -236,6 +236,12 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c21fi"]
 size = Vector2(13, 13)
 
+[sub_resource type="StyleBoxFlat" id="BarTrack"]
+bg_color = Color(0.1, 0.07, 0.16, 1)
+
+[sub_resource type="StyleBoxFlat" id="PlayerFill"]
+bg_color = Color(0.32, 0.91, 0.65, 1)
+
 [node name="Player" type="CharacterBody2D" unique_id=512604986]
 position = Vector2(624, 384)
 script = ExtResource("1_3mip4")
@@ -290,5 +296,25 @@ stream = ExtResource("3_insbl")
 
 [node name="failure" type="AudioStreamPlayer2D" parent="." unique_id=2068991151]
 stream = ExtResource("4_rug40")
+
+[node name="Vitals" type="CanvasLayer" parent="."]
+
+[node name="HealthLabel" type="Label" parent="Vitals"]
+offset_left = 16.0
+offset_top = 64.0
+text = "HP  3 / 3"
+theme_override_constants/outline_size = 4
+
+[node name="HealthBar" type="ProgressBar" parent="Vitals"]
+offset_left = 16.0
+offset_top = 91.0
+offset_right = 156.0
+offset_bottom = 103.0
+mouse_filter = 2
+theme_override_styles/background = SubResource("BarTrack")
+theme_override_styles/fill = SubResource("PlayerFill")
+max_value = 3.0
+value = 3.0
+show_percentage = false
 
 [connection signal="pressed" from="Camera2D/VBoxContainer/Button" to="." method="_on_button_pressed"]

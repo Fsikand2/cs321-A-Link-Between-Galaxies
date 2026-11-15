@@ -28,6 +28,10 @@ func read_data() -> Dictionary:
 
 	if data["keys"] < 0 or not data.get("game_over") is bool:
 		return {}
+	if data.has("health"):
+		var hp = data["health"]
+		if not (hp is float or hp is int) or not is_finite(float(hp)) or hp < 0 or hp != floor(hp):
+			return {}
 	if not data.get("removed_cells") is Array:
 		return {}
 	for cell in data["removed_cells"]:

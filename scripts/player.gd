@@ -1,6 +1,8 @@
 extends CharacterBody2D
 
 const SPEED = 50.0
+const MAX_HEALTH := 3
+var health := MAX_HEALTH
 var keys = 0;
 var look_at_dir := Vector2.DOWN
 var is_game_over = false
@@ -20,6 +22,8 @@ var shoot_timer: float = 0.0
 @onready var label_2: Label = $Camera2D/VBoxContainer/Label2
 
 func _ready() -> void:
+	$Vitals/HealthBar.max_value = MAX_HEALTH
+	set_health(MAX_HEALTH)
 	if not SaveGame.data_to_load.is_empty():
 		load_data(SaveGame.data_to_load)
 	SaveGame.data_to_load = {}
@@ -29,6 +33,8 @@ func _physics_process(delta: float) -> void:
 		return;
 	
 	process_interaction()
+	if is_game_over:
+		return
 	
 	if shoot_timer > 0:
 		shoot_timer -= delta
@@ -52,7 +58,20 @@ func shoot():
 	projectile.global_position = global_position + look_at_dir * 16
 	projectile.direction = look_at_dir.normalized()
 	
+func set_health(amount: int) -> void:
+	health = clampi(amount, 0, MAX_HEALTH)
+	$Vitals/HealthBar.value = health
+	$Vitals/HealthLabel.text = "HP  %d / %d" % [health, MAX_HEALTH]
+
+func take_damage(amount: int) -> void:
+	if is_game_over or amount <= 0:
+		return
+	set_health(health - amount)
+	if health == 0:
+		game_over()
+
 func game_over():
+	set_health(0)
 	is_game_over = true
 	velocity = Vector2.ZERO
 	label_2.text = "Score:" + str(keys * 100)
@@ -61,6 +80,7 @@ func game_over():
 
 func save_data() -> bool:
 	var data = {
+		"health": health,
 		"keys": keys,
 		"position_x": global_position.x,
 		"position_y": global_position.y,
@@ -85,12 +105,13 @@ func save_data() -> bool:
 	return result == OK
 
 func load_data(data: Dictionary) -> void:
+	set_health(int(data.get("health", MAX_HEALTH)))
 	keys = int(data["keys"])
 	global_position = Vector2(data["position_x"], data["position_y"])
 	removed_cells = data["removed_cells"]
 	for cell in removed_cells:
 		decoration.erase_cell(Vector2i(int(cell[0]), int(cell[1])))
-	if data["game_over"]:
+	if data["game_over"] or health == 0:
 		game_over()
 
 func process_interaction():
