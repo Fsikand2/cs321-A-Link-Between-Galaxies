@@ -18,8 +18,12 @@ var shoot_timer: float = 0.0
 @onready var pickup_success: AudioStreamPlayer2D = $Pickup_Success
 @onready var failure: AudioStreamPlayer2D = $failure
 @onready var v_box_container: VBoxContainer = $Camera2D/VBoxContainer
-@onready var button: Button = $Camera2D/VBoxContainer/Button
-@onready var label_2: Label = $Camera2D/VBoxContainer/Label2
+
+
+@onready var death_screen: Control = $Vitals/DeathScreen
+@onready var score_label: Label = $Vitals/DeathScreen/CenterContainer/VBoxContainer/ScoreLabel
+@onready var menu_button: Button = $Vitals/DeathScreen/CenterContainer/VBoxContainer/MenuButton
+
 
 func _ready() -> void:
 	$Vitals/HealthBar.max_value = MAX_HEALTH
@@ -70,13 +74,17 @@ func take_damage(amount: int) -> void:
 	if health == 0:
 		game_over()
 
-func game_over():
+
+func game_over() -> void:
+	if is_game_over:
+		return
 	set_health(0)
 	is_game_over = true
 	velocity = Vector2.ZERO
-	label_2.text = "Score:" + str(keys * 100)
-	v_box_container.show()
-	button.grab_focus()
+	score_label.text = "Score: " + str(keys * 100)
+	death_screen.show()
+	menu_button.grab_focus()
+
 
 func save_data() -> bool:
 	var data = {
