@@ -27,7 +27,7 @@ func _ready() -> void:
 func all_enemies_killed():
 	var cell = Vector2i(16,33); ##chest location
 	var source_id = 0
-	var atlas_coords = Vector2i(12, 4)
+	var atlas_coords = Vector2i(13, 3) ##spawn special chest
 	decoration.set_cell(cell, source_id, atlas_coords)
 	
 	
@@ -63,7 +63,8 @@ func build_hud() -> void:
 	status.add_theme_color_override("font_color", Color("fff1ce"))
 	row.add_child(status)
 	var menu := Button.new()
-	menu.text = "Save & Menu · Esc"
+	var txt = "Save & Menu · Esc"
+	menu.text = txt
 	menu.focus_mode = Control.FOCUS_NONE
 	menu.pressed.connect(return_to_menu)
 	row.add_child(menu)
@@ -85,6 +86,8 @@ func _physics_process(_delta: float) -> void:
 		PLAYABLE_BOUNDS.end - PLAYER_MARGIN
 	)
 	status.text = "Keys: " + str(player.keys)
+	if(player.special_item):
+		status.text += " ---- Items: Gloves of Strength"
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):

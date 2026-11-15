@@ -5,6 +5,7 @@ var keys = 0;
 var look_at_dir := Vector2.DOWN
 var is_game_over = false
 var removed_cells: Array = []
+var special_item = false;
 
 @export var projectile_scene: PackedScene
 @export var shoot_cooldown: float = 0.3
@@ -107,6 +108,11 @@ func process_interaction():
 		
 	
 	if Input.is_action_just_pressed("interact"):
+		if tile_id == 6:
+			special_item = true;
+			pickup_success.play()
+			decoration.erase_cell(cell)
+			removed_cells.append([cell.x, cell.y])
 		if tile_id == 1:
 			keys += 1
 			pickup_success.play()
