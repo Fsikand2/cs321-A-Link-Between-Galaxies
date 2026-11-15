@@ -25,6 +25,8 @@ var is_attacking: bool = false
 
 func _ready() -> void:
 	health = max_health
+	$HealthBar.max_value = max_health
+	$HealthBar.value = health
 	sprite.play("Idle")
 
 	detection_area.body_entered.connect(_on_player_detected)
@@ -55,14 +57,19 @@ func _physics_process(delta: float) -> void:
 
 func attack() -> void:
 	cooldown = attack_cooldown
+	is_attacking = true
 	sprite.play("Jump")
+	# body_entered only fires on entry. A player already in range can also be hit.
+	for body in attack_area.get_overlapping_bodies():
+		_on_attack_hit(body)
 
 
 func take_damage(amount: int = 1) -> void:
 	if is_dead or is_hurt:
 		return
 
-	health -= amount
+	health = maxi(0, health - amount)
+	$HealthBar.value = health
 
 	if health <= 0:
 		die()
@@ -99,7 +106,10 @@ func on_death() -> void:
 
 
 func _on_animation_finished() -> void:
-	if sprite.animation == "Death":
+	if sprite.animation == "Jump":
+		is_attacking = false
+		sprite.play("Idle")
+	elif sprite.animation == "Death":
 		on_death()
 	elif sprite.animation == "Hurt":
 		is_hurt = false
@@ -122,4 +132,5 @@ func _on_attack_hit(body: Node2D) -> void:
 
 	if body.is_in_group("player"):
 		if body.has_method("take_damage"):
+			is_attacking = false # At most one hit per jump.
 			body.take_damage(attack_damage)

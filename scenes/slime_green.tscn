@@ -294,8 +294,14 @@ size = Vector2(32, 26)
 [sub_resource type="CircleShape2D" id="CircleShape2D_1aq42"]
 radius = 128.99612
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_db0e1"]
-radius = 65.00769
+[sub_resource type="RectangleShape2D" id="AttackContact"]
+size = Vector2(34, 28)
+
+[sub_resource type="StyleBoxFlat" id="BarTrack"]
+bg_color = Color(0.14, 0.06, 0.12, 1)
+
+[sub_resource type="StyleBoxFlat" id="EnemyFill"]
+bg_color = Color(1, 0.39, 0.32, 1)
 
 [node name="SlimeGreen" type="CharacterBody2D" unique_id=1929336461]
 script = ExtResource("1_aqssr")
@@ -317,5 +323,18 @@ shape = SubResource("CircleShape2D_1aq42")
 [node name="AttackArea" type="Area2D" parent="." unique_id=302789298]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=283270549]
-position = Vector2(-1, -1)
-shape = SubResource("CircleShape2D_db0e1")
+position = Vector2(0, 3)
+shape = SubResource("AttackContact")
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+z_index = 2
+offset_left = -14.0
+offset_top = -25.0
+offset_right = 14.0
+offset_bottom = -22.0
+mouse_filter = 2
+theme_override_styles/background = SubResource("BarTrack")
+theme_override_styles/fill = SubResource("EnemyFill")
+max_value = 3.0
+value = 3.0
+show_percentage = false
